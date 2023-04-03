@@ -54,7 +54,5 @@ let sig_item config s =
 let signature config = List.filter_map (sig_item config)
 
 let run path init sut =
-  (* temporary implementation until Config uses the new Reserr *)
-  match Config.init path init sut with
-  | Ok (sigs, config) -> signature config sigs
-  | Error _err -> assert false
+  let* sigs, config = Config.init path init sut in
+  signature config sigs |> Reserr.sequence
