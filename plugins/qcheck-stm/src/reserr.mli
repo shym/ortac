@@ -13,7 +13,9 @@ type 'a reserr
 
 val ok : 'a -> 'a reserr
 val error : W.t -> 'a reserr
+val warns : W.t list -> unit reserr
+val warn : W.t -> unit reserr
 val ( let* ) : 'a reserr -> ('a -> 'b reserr) -> 'b reserr
 val ( and* ) : 'a reserr -> 'b reserr -> ('a * 'b) reserr
-val sequence : 'a reserr list -> 'a list reserr
+val promote : 'a reserr list -> 'a list reserr
 val pp : 'a Fmt.t -> 'a reserr Fmt.t
