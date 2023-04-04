@@ -55,4 +55,4 @@ let signature config = List.filter_map (sig_item config)
 
 let run path init sut =
   let* sigs, config = Config.init path init sut in
-  signature config sigs |> Reserr.sequence
+  signature config sigs |> Reserr.promote

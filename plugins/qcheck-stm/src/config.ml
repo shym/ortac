@@ -8,6 +8,11 @@ type t = {
   sut : Ttypes.tysymbol;
 }
 
+let dump ppf t =
+  Fmt.(
+    pf ppf "init: %a; sut: %a@." Identifier.Ident.pp t.init Identifier.Ident.pp
+      t.sut.ts_ident)
+
 let get_sut_ts_from_td sut td =
   let open Identifier.Ident in
   if td.td_ts.ts_ident.id_str = sut then Some td.td_ts else None

@@ -1,0 +1,23 @@
+test with existing sut type:
+============================
+
+init: good_init; sut: sut
+
+test with non-existing sut type:
+================================
+
+File "_none_", line 0, characters -1--1:
+Error: Type `absent' is not declared in the module.
+
+test with a wrong type for init function:
+=========================================
+
+File "_none_", line 0, characters -1--1:
+Error: Function `bad_init' is not declared in the module.
+
+test with an absent init function:
+==================================
+
+File "_none_", line 0, characters -1--1:
+Error: Function `absent' is not declared in the module.
+

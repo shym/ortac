@@ -23,7 +23,7 @@ let level kind =
 
 type 'a reserr = ('a, W.t list) result * W.t list
 
-let ok x = Result.ok x, []
+let ok x = (Result.ok x, [])
 let error e = (Result.error [ e ], [])
 let warns ws = (Result.ok (), ws)
 let warn w = warns [ w ]
@@ -43,7 +43,6 @@ let ( and* ) (a, aw) (b, bw) =
     | Ok a, Ok b -> Ok (a, b)
   in
   (r, aw @ bw)
-
 
 let pp_kind ppf kind =
   let open Fmt in
@@ -65,7 +64,7 @@ let pp_kind ppf kind =
     | _ -> raise W.Unkown_kind)
 
 let pp_errors = W.pp_param pp_kind level |> Fmt.list
-let pp pp_ok = Fmt.result ~ok:pp_ok ~error:pp_errors
+let pp pp_ok = Fmt.(pair (result ~ok:pp_ok ~error:pp_errors) pp_errors)
 
 let promote r =
   let rec aux = function

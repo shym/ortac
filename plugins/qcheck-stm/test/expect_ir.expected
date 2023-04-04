@@ -1,3 +1,7 @@
+id = f
+
+id = g
+
 File "lib.mli", line 3, characters 0-27:
 Warning: `good_init' have no sut argument.
 File "lib.mli", line 3, characters 0-27:
@@ -20,7 +24,3 @@ Warning: `constant' have no sut argument.
 
 File "lib.mli", line 7, characters 0-36:
 Warning: `multiple_sut' have multiple sut arguments.
-
-id = f
-
-id = g
