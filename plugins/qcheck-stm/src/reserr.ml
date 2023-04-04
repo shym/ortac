@@ -7,6 +7,10 @@ type W.kind +=
   | Value_have_multiple_sut_arguments of string
   | Sut_type_not_present of string
   | Init_function_not_present of string
+  | Syntax_error_in_type of string
+  | Sut_type_not_supported
+  | Type_parameter_not_instantiated
+  | Type_not_supported_for_sut_parameter
   | No_testable_values of string
 
 let level kind =
@@ -17,7 +21,8 @@ let level kind =
     | Value_have_multiple_sut_arguments _ ->
         W.Warning
     | Sut_type_not_present _ | Init_function_not_present _
-    | No_testable_values _ ->
+    | No_testable_values _ | Syntax_error_in_type _ | Sut_type_not_supported
+    | Type_not_supported_for_sut_parameter | Type_parameter_not_instantiated ->
         W.Error
     | _ -> raise W.Unkown_kind)
 
@@ -61,6 +66,15 @@ let pp_kind ppf kind =
         pf ppf "Function %a is not declared in the module." W.quoted f
     | No_testable_values m ->
         pf ppf "Module %a does not contain any testable values." W.quoted m
+    | Syntax_error_in_type t ->
+        pf ppf "%a is not a well formed type expression." W.quoted t
+    | Sut_type_not_supported ->
+        pf ppf "The type given for the system under test is not supported."
+    | Type_parameter_not_instantiated ->
+        pf ppf "Type parameter of the system under test should be instantiated."
+    | Type_not_supported_for_sut_parameter ->
+        pf ppf
+          "Type not supported yet as type argument for the system under test."
     | _ -> raise W.Unkown_kind)
 
 let pp_errors = W.pp_param pp_kind level |> Fmt.list

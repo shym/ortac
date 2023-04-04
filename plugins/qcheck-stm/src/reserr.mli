@@ -7,6 +7,10 @@ type W.kind +=
   | Value_have_multiple_sut_arguments of string
   | Sut_type_not_present of string
   | Init_function_not_present of string
+  | Syntax_error_in_type of string
+  | Sut_type_not_supported
+  | Type_parameter_not_instantiated
+  | Type_not_supported_for_sut_parameter
   | No_testable_values of string
 
 type 'a reserr

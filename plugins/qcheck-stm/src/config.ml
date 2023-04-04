@@ -6,12 +6,47 @@ type t = {
   context : Context.t;
   init : Identifier.Ident.t;
   sut : Ttypes.tysymbol;
+  sut_core_type : Ppxlib.core_type;
 }
 
 let dump ppf t =
   Fmt.(
     pf ppf "init: %a; sut: %a@." Identifier.Ident.pp t.init Identifier.Ident.pp
       t.sut.ts_ident)
+
+let core_type_of_string t =
+  let open Reserr in
+  try Ppxlib.Parse.core_type (Lexing.from_string t) |> ok
+  with _ -> error (Syntax_error_in_type t, Location.none)
+
+let rec acceptable_type_parameter param =
+  let open Ppxlib in
+  let open Reserr in
+  match param.ptyp_desc with
+  | Ptyp_constr (_, cts) ->
+      let* _ = List.map acceptable_type_parameter cts |> promote in
+      ok ()
+  | Ptyp_tuple args ->
+      let* _ = List.map acceptable_type_parameter args |> promote in
+      ok ()
+  | Ptyp_var _ | Ptyp_any ->
+      error (Type_parameter_not_instantiated, Location.none)
+  | _ -> error (Type_not_supported_for_sut_parameter, Location.none)
+
+let core_type_is_a_well_formed_sut (t : Ppxlib.core_type) =
+  let open Ppxlib in
+  let open Reserr in
+  match t.ptyp_desc with
+  | Ptyp_constr (lid, cts) ->
+      let* _ = List.map acceptable_type_parameter cts |> promote in
+      ok (lid, cts)
+  | _ -> error (Sut_type_not_supported, Location.none)
+
+let sut_core_type t =
+  let open Reserr in
+  let* sut_core_type = core_type_of_string t in
+  let* _ = core_type_is_a_well_formed_sut sut_core_type in
+  ok sut_core_type
 
 let get_sut_ts_from_td sut td =
   let open Identifier.Ident in
@@ -57,6 +92,7 @@ let init path init sut_str =
   let namespace = List.hd env in
   let context = Context.init module_name namespace in
   let open Reserr in
+  let* sut_core_type = sut_core_type sut_str in
   let* sut = get_sut_ts_from_signature sut_str sigs in
   let* init = get_init_id_from_signature sut init sigs in
-  Reserr.ok (sigs, { context; init; sut })
+  Reserr.ok (sigs, { context; init; sut; sut_core_type })

@@ -21,3 +21,21 @@ test with an absent init function:
 File "_none_", line 0, characters -1--1:
 Error: Function `absent' is not declared in the module.
 
+test with not well formed type expression:
+==========================================
+
+File "_none_", line 0, characters -1--1:
+Error: `a-t' is not a well formed type expression.
+
+test with non instantiated sut type parameter:
+==============================================
+
+File "_none_", line 1, characters -1--1:
+Error: Type parameter of the system under test should be instantiated.
+
+test with arrow type as sut:
+============================
+
+File "_none_", line 1, characters -1--1:
+Error: The type given for the system under test is not supported.
+

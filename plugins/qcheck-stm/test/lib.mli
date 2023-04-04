@@ -1,4 +1,5 @@
 type sut
+type 'a t
 
 val good_init : unit -> sut
 val bad_init : sut
