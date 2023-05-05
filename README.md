@@ -146,7 +146,9 @@ limitations on what Gospel specifications are supported.
 1. The first general rule is the fact that they can only translate the
    executable fragment of the language.
 
-2. They do not support `model`s yet.
+2. They do not support yet:
+   - `model`s,
+   - the `old` operator.
 
 3. The [runtime] currently supports only part of the Gospel Stdlib
    (see its `Gospelstdlib` module) but it is easy to extend if needed.
