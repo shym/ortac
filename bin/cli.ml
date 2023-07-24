@@ -3,9 +3,10 @@ let () = Sites.Plugins.Plugins.load_all ()
 open Cmdliner
 
 let usage () =
-  Format.(fprintf std_formatter)
-    "ortac command-line tool requires at least one plugin.@\n\
-     Please install one."
+  Format.(fprintf err_formatter)
+    "@[ortac: required plugin is missing, please install at least one@ \
+     (qcheck-stm,@ monolith@ or@ wrapper).@]@.";
+  exit Cmd.Exit.cli_error
 
 let () =
   match

@@ -6,7 +6,7 @@
  (libraries
   alcotest
   ortac-runtime
-  ortac_core
+  ortac-core
   ortac-wrapper.plugin
   gospel
   fmt

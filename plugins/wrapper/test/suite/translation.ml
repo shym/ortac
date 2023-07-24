@@ -1,3 +1,5 @@
+module Ir = Ortac_wrapper__Ir
+
 let translate path =
   let module_name = Ortac_core__Utils.module_name_of_path path in
   Gospel.Parser_frontend.parse_ocaml_gospel path

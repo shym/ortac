@@ -4,7 +4,7 @@
  (preprocess
   (pps ppxlib.metaquot))
  (libraries
-  ortac_core
+  ortac-core
   ortac-core.register
   ortac-wrapper.plugin
   gospel

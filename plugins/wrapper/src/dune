@@ -6,7 +6,7 @@
   fmt
   ppxlib
   ppxlib.astlib
-  ortac_core
+  ortac-core
   ortac-core.register
   gospel)
  (preprocess
