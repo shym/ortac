@@ -130,9 +130,13 @@ let pp_kind ppf kind =
       pf ppf "Skipping unsupported modifies clause:@ %a" text
         "expected \"modifies x\" or \"modifies x.model\" where x is the SUT"
   | Ensures_not_found_for_next_state (f, m) ->
-      pf ppf "Skipping %s:@ model@ %s@ %a" f m text
-        "is declared as modified by the function but no translatable ensures \
-         clause was found"
+      pf ppf "@[Skipping %s:@ model@ %s@ %a@]@ @[%a@]@ @[%s = f (old %s)@]" f m
+        text
+        "is declared as modified by the function but no suitable ensures \
+         clause was found."
+        text
+        "Specifications should contain at least one ensures clause of the form"
+        m m
   | Functional_argument f ->
       pf ppf "Skipping %s:@ %a" f text
         "functions are not supported yet as arguments"
