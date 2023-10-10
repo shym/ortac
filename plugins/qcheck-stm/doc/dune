@@ -1,0 +1,22 @@
+(mdx
+ (package ortac-qcheck-stm)
+ (deps
+  (package ortac-core)
+  (package ortac-qcheck-stm)))
+
+(documentation
+ (package ortac-qcheck-stm)
+ (mld_files index))
+
+(rule
+ (alias runtest)
+ (package ortac-qcheck-stm)
+ (deps
+  (:example example.mli)
+  (package gospel))
+ (action
+  (setenv
+   ORTAC_ONLY_PLUGIN
+   qcheck-stm
+   (ignore-outputs
+    (run gospel check %{example})))))
