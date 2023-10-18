@@ -12,11 +12,9 @@
  (alias runtest)
  (package ortac-qcheck-stm)
  (deps
-  (:example example.mli)
+  (:examples
+   (glob_files *.mli))
   (package gospel))
  (action
-  (setenv
-   ORTAC_ONLY_PLUGIN
-   qcheck-stm
-   (ignore-outputs
-    (run gospel check %{example})))))
+  (ignore-outputs
+   (run gospel check %{examples}))))
