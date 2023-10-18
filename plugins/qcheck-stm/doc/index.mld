@@ -32,7 +32,7 @@ We are going to build an example for a simple fixed-size container library.
 {1 How to write gospel specifications?}
 
 In order to use the [qcheck-stm] plugin, the module you want to test must
-contains three kind of items:
+contain three kinds of items:
 
 {ol {- The type declaration for [SUT]}
     {- The function used to generate the initial value of [SUT]}
@@ -68,11 +68,11 @@ val make : int -> 'a -> 'a t
 ]}
 
 Obviously, the function should return a value of type [SUT]. But more
-importanlly, the specification have to give a value to each of the models that
-were given to the type [SUT] in its specifications. Here, this means we need to
+importantly, the specification has to give a value to each of the models that
+were given to the type [SUT] in its specification. Here, this means we need to
 give a value to [t.size] and to [t.contents]. The [checks] clause is part of
 the Gospel specification of the function, but it won't be used by the plugin to
-generate any code. You can give more information that the plugin need, for
+generate any code. You can give more information that the plugin needs, for
 example if you are also using another tool based on Gospel specifications. The
 plugin will simply ignore them.
 
@@ -97,15 +97,15 @@ This is done in two steps.
 First, you have to declare which of the model's field are modified in the
 [modifies] clause. Note that if, like in the case of the [set] function, the
 function is returning [unit], it is a Gospel error to not give any [modifies]
-clause. But Gospel let you write [modifies ()] in order to express the fact
+clause. But Gospel lets you write [modifies ()] in order to express the fact
 that the function is modifying something that is not in the model of any of the
 argument. However, the [qcheck-stm] plugin will read the [modifies] clauses (if
-any) in order to determine which model's field it has modify when the function
+any) in order to determine which model's fields are modified when the function
 is called. The model's fields that don't appear in any of the [modifies]
-clauese will be considered as not modified.
+clauses will be considered as not modified.
 
 Then, the plugin will look at the [ensures] clauses (the postconditions) in
-order to find one clause per modified field that express how to compute the
+order to find one clause per modified field that expresses how to compute the
 modification. For now, the tool is not very smart. The basic rule of thumb is
 that you need to write down a computable description of the new model's field
 as a function of the old one. This will often mean that you need to write
@@ -129,17 +129,18 @@ val get : 'a t -> int -> 'a
     ensures a = List.nth t.contents i *)
 ]}
 
-Here, the [ensures] clause have another use. As the [get] function does not
-modifies anything, there is no [next_state] function to be computed. Not that
-the [ensures] clause wouldn't have been fit for this purpose. The [ensures]
-clauses that are not used for the [next_state] function are used for checking
-postconditions. Here a postcondition stating a relation between the returned
-value and the function arguments. These [ensures] clauses are not necessary to
-generate the QCheck-STM tests, but they will bring strength to your tests.
+Here, the [ensures] clause has another use. As the [get] function does not
+modifies anything, there is no need to give the values of the model’s fields
+after the function. Note that the [ensures] clause wouldn't have been fit for
+this purpose anyway. The [ensures] clauses that are not used for the
+[next_state] function are used for checking postconditions, here a postcondition
+stating a relation between the returned value and the function arguments. These
+[ensures] clauses are not necessary to generate the QCheck-STM tests, but they
+will bring strength to your tests.
 
-In order to generate postondition-checking, [qhcekc-stm] looks into the
-[ensures] clauses that were not used for the [next_state] function, the
-[checks] and the [raises] one.
+In order to generate postcondition-checking, [qcheck-stm] uses the [ensures]
+clauses that were not used for the [next_state] function but it also uses the
+[checks] clauses and the [raises] ones.
 
 Now you can generate the QCheck-STM file by running the following command where
 you indicate the file you want to test, the function call to build a value of
@@ -182,10 +183,10 @@ like the following:
 Now that you know what Gospel specifications for the [qcheck-stm] plugin should
 look like and how to generate the QCheck-STM file, let's focus on what can go
 wrong. The [qcheck-stm] plugin has an extensive set of warnings to help you
-formulate your specifications in a way it can use them.
+formulate your specifications in a way it can use.
 
 Most of the time, the [qcheck-stm] will skip a function if it can't generate
-one of the element needed by QCheck-STM. Doing so, it will display a warning on
+one of the elements needed by QCheck-STM. Doing so, it will display a warning on
 [stderr] in order for you to be able to get an idea about test coverage.
 
 
@@ -196,7 +197,7 @@ Let's start with the warnings specific to the plugin.
 The principle at the core of the [ortac-stm] plugin is to turn the Gospel
 specifications into OCaml code needed by the QCheck-STM test framework. This
 means that you need to provide these pieces of information into the specification
-in a style that allow the plugin to understand them.
+in a style that allows the plugin to understand them.
 
 The most delicate piece of information you have to give is how the function
 modifies the model of the [SUT]. As stated above, the plugin is looking for
@@ -218,7 +219,7 @@ val ensures_not_found_for_next_state : 'a t -> unit
 ]}
 
 [ortac-qcheck] will look at the [modifies] clause and then look for an
-[ensures] clause for each of the modified models that allow to compute their
+[ensures] clause for each of the modified models that allows to compute its
 new value. Here, it won't find any and warn you with the following message:
 
 {@sh[
@@ -235,25 +236,25 @@ Warning: Skipping ensures_not_found_for_next_state: model contents is
 
 Note that you don't have to rewrite the clause. Maybe it contains information
 you still want to state in your specifications. You can then add another
-[ensures] clause with the relevant information in order to compute the new
-value of the modified model. The warning message gives you the form in wich the
-plugin expect to find the information, taht is a description of the new state
-by an expression in which, any reference to the state should be to the old
-version of the state (that is the state before the function is called).
+[ensures] clause with the relevant information in order to compute the new value
+of the modified model. The warning message gives you the form in which the
+plugin expects to find the information, namely a description of the new state
+by an expression in which any reference to the state should be to the old
+state (that is the state before the function is called).
 
-Note also that if you write [modifies t], the plugin understand that all the
-mutable fields are modifies and will try to find a description for all of them.
+Note also that if you write [modifies t], the plugin assumes that all the
+mutable fields are modified and will try to find a description for all of them.
 So you'll need to avoid being too general in the modifies clauses.
 
 Internally, QCheck-STM uses an extensible type to encode function's type
 signature. The plugin uses the type signature to automatically generate this
 encoding. But, in case you are using a type that is not yet encoded in this
-extensible type, [ortac-stm] will generate the code using the not yet existing
-constructor using the implicit rule of capitalizing the name of the type. This
-will generate non compiling code, but you'll then have the chance to add the
-new constructor by hand in the generated code.
+extensible type, the [qcheck-stm] plugin will generate code using the
+not-yet-defined constructor using the implicit rule of capitalizing the name of
+the type. This will generate non-compiling code, but you'll then have the chance
+to add the new constructor by hand in the generated code.
 
-For example, looking at the following function along its specifictions, the
+For example, looking at the following function along its specifications, the
 plugin will make the assumption that the  QCheck-STM `ty` is extended with a
 [New_type] constructor and a [new_type] functional combinator is defined.
 
@@ -276,10 +277,10 @@ $ grep -A 3 "let run" foo.ml
 
 You can open the [foo.ml] file to edit it in this way.
 
-In Gospel, you have the possibility to use ghost values, as argument and/or as
-returned value. As that doesn't make  a lot of sense on the program side,
-[qcheck-stm] doesn't support Gospel specifications with ghost values in the
-header.
+In Gospel, you have the possibility to use ghost values, as arguments and/or as
+returned values. As those values don’t exist in the actual code that will be
+called during the test, [qcheck-stm] doesn't support Gospel specifications with
+ghost values in the header.
 
 If we add the following declaration to our example file,
 
@@ -300,9 +301,9 @@ Warning: Skipping incompatible_type: the type of its SUT-type argument is
 ]}
 
 You'll need to write your specifications without using [ghost] arguments or
-returned value if you want to test this function with [qhcheck-stm].
+returned value if you want to test this function with [qcheck-stm].
 
-Finally, when you want to test a library with a parmetarized type, you need to
+Finally, when you want to test a library with a parameterized type, you need to
 instantiate the type parameter in order to generate the QCheck-STM tests.
 Choosing the right instantiation implies to be careful when the library
 contains specialized functions.
@@ -325,17 +326,17 @@ Warning: Skipping incompatible_type: the type of its SUT-type argument is
          incompatible with the configured SUT type: char t.
 ]}
 
-In the case you have functions specialized with different instantiation, you
-can always generate multiple test-files with different instantiation.
+In the case you have functions specialized with different instantiations, you
+can always generate one test per possible instantiation, of course.
 
 {2 [ortac] limitations}
 
 The second source of limitations is the [ocaml_of_gospel] translation provided
-by the [ortac-core] package. Gospel being a logical language, it is not
-computable. [ortac-core] identifies a computable subset of Gospel and
-translates it to OCaml. But there is still some limitations, in particular
-concerning quantification. For now, only well bounded quantifications over
-integer are supported.
+by the [ortac-core] package. Gospel being a logical language, it is not fully
+executable. [ortac-core] identifies an executable subset of Gospel and
+translates it to OCaml. But there are still some limitations, in particular
+concerning quantification. For now, only well-bounded quantifications over
+integers are supported.
 
 If we add the following declaration to our example file,
 
@@ -357,7 +358,7 @@ Warning: Skipping clause: unsupported quantification.
 
 Note that only the clause involving the unsupported quantification has not been
 translated. If your function's specification contains other clauses that can be
-translated and contains enough information for the plugin to do its job, then
+translated and contain enough information for the plugin to do its job, then
 you will be able to test your function. If not, maybe you can rewrite the
 clause without involving this sort of quantification. In this particular
 example, you can use the [List.for_all] combinator from the Gospel standard
@@ -376,7 +377,7 @@ that should be lifted in the future. Fow now, we only support testing functions
 with exactly one [SUT] argument in its signature and we only support
 first-order functions.
 
-If we add the following declaration to our example file,
+If we add the following declarations to our example file,
 
 {@ocaml file=example_limitations.mli,part=fun-decl[
 val f : int -> int -> bool
