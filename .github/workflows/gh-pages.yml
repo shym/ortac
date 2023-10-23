@@ -5,19 +5,15 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Cache opam
-        id: cache-opam
-        uses: actions/cache@v3
-        with:
-          path: ~/.opam
-          key: opam-ubuntu-latest-5.0.0
 
       - name: Set-up OCaml 5.0
         uses: ocaml/setup-ocaml@v2
