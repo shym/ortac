@@ -38,7 +38,7 @@ executable that you will find in your `_build` directory.
 
 This is an example of a library exposing Functor. In order to test a Functor,
 it is necessary to instantiate it. The [`varray`](https://github.com/art-w/varray)
-library already exposes intantiation of its Functor. Here, we provide generated tests
+library already exposes some intantiations of its Functor. Here, we provide generated tests
 for two of them.
 
 The signature of the output of the Functor is originally placed in a `ml` file.
@@ -51,6 +51,6 @@ just the respective modules included.
 
 Here again, as for the previous example, we need to include some code. That is the
 extension of the `STM.ty` type. But also a `QCheck` generator for the `'a elt` type,
-as some function of the library take this type as argument.
+as some functions of the library take arguments of this type.
 
-The generated code can be found in the respespective `varray*tests.ml` files.
+The generated code can be found in the respective `varray*tests.ml` files.
