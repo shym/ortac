@@ -2,6 +2,9 @@
 (generate_opam_files)
 (using dune_site 0.1)
 (using mdx 0.4)
+(subst disabled)
+
+(version 0.1.0.dev)
 
 (name ortac)
 (license MIT)
@@ -29,6 +32,7 @@
  (documentation "https://ocaml-gospel.github.io/ortac/ortac-core/")
  (depends
   (ocaml (>= 4.11.0))
+  dune-build-info
   dune-site
   (cmdliner (>= 1.1.0))
   fmt
