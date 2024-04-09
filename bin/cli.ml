@@ -5,25 +5,18 @@ let () =
 
 open Cmdliner
 
-let usage () =
-  Format.(fprintf err_formatter)
-    "@[ortac: required plugin is missing, please install at least one@ \
-     (qcheck-stm,@ monolith@ or@ wrapper).@]@.";
-  exit Cmd.Exit.cli_error
-
 let () =
-  match
+  let doc = "Run ORTAC."
+  and version =
+    Printf.sprintf "ortac version: %s"
+      (match Build_info.V1.version () with
+      | None -> "n/a"
+      | Some v -> Build_info.V1.Version.to_string v)
+  in
+  let info = Cmd.info "ortac" ~doc ~version
+  and default = Term.(ret (const (`Help (`Pager, None))))
+  and cmds =
     Registration.fold (fun acc cmd -> cmd :: acc) [] Registration.plugins
-  with
-  | [] -> usage ()
-  | cmds ->
-      let doc = "Run ORTAC." in
-      let version =
-        Printf.sprintf "ortac version: %s"
-          (match Build_info.V1.version () with
-          | None -> "n/a"
-          | Some v -> Build_info.V1.Version.to_string v)
-      in
-      let info = Cmd.info "ortac" ~doc ~version in
-      let group = Cmd.group info cmds in
-      Stdlib.exit (Cmd.eval group)
+  in
+  let group = Cmd.group info ~default cmds in
+  Stdlib.exit (Cmd.eval group)
