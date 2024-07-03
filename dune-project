@@ -147,7 +147,8 @@
   )
  (authors
   "Nicolas Osborne <nicolas.osborne@tarides.com>"
-  "Samuel Hym <samuel.hym@rustyne.lautre.net>")
+  "Samuel Hym <samuel.hym@rustyne.lautre.net>"
+  "Nikolaus Huber <mail@n-huber.eu>")
  (documentation "https://ocaml-gospel.github.io/ortac/ortac-qcheck-stm/")
  (depends
   (ocaml (>= 4.12.0))

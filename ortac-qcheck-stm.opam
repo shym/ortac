@@ -16,6 +16,7 @@ maintainer: ["Nicolas Osborne <nicolas.osborne@tarides.com>"]
 authors: [
   "Nicolas Osborne <nicolas.osborne@tarides.com>"
   "Samuel Hym <samuel.hym@rustyne.lautre.net>"
+  "Nikolaus Huber <mail@n-huber.eu>"
 ]
 license: "MIT"
 homepage: "https://github.com/ocaml-gospel/ortac"
