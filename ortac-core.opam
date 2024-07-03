@@ -13,7 +13,7 @@ Ortac Core provides:
 You will need at least one of the Ortac plugins to actually
 generate test code.
 """
-maintainer: ["Clément Pascutto <clement@pascutto.fr>"]
+maintainer: ["Nicolas Osborne <nicolas.osborne@tarides.com>"]
 authors: [
   "Clément Pascutto <clement@pascutto.fr>"
   "Nicolas Osborne <nicolas.osborne@tarides.com>"
