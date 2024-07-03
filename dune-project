@@ -12,7 +12,7 @@
 (authors
  "Clément Pascutto <clement@pascutto.fr>"
  "Nicolas Osborne <nicolas.osborne@tarides.com>"
- "Samuel Hym <samuel.hym@rustyne.lautre.net>")
+ "Samuel Hym <samuel@tarides.com>")
 
 (package
  (name ortac-core)
@@ -147,7 +147,7 @@
   )
  (authors
   "Nicolas Osborne <nicolas.osborne@tarides.com>"
-  "Samuel Hym <samuel.hym@rustyne.lautre.net>"
+  "Samuel Hym <samuel@tarides.com>"
   "Nikolaus Huber <mail@n-huber.eu>")
  (documentation "https://ocaml-gospel.github.io/ortac/ortac-qcheck-stm/")
  (depends
@@ -203,7 +203,7 @@
   "Ortac examples on different libraries")
  (authors
   "Nicolas Osborne <nicolas.osborne@tarides.com>"
-  "Samuel Hym <samuel.hym@rustyne.lautre.net>")
+  "Samuel Hym <samuel@tarides.com>")
  (depends
   (ocaml (>= 4.12.0))
   (ortac-core (= :version))
